@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050914">
+
+<title>Shadow Academy — The Awakening</title>
+
+<style>
+:root {
+  --bg: #050914;
+  --panel: #0a1425;
+  --blue: #37b8ff;
+  --blue2: #8ce0ff;
+  --text: #edf8ff;
+  --muted: #91a9c2;
+  --line: #183553;
+  --green: #69f0b0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(
+    ellipse at top,
+    #10284a 0%,
+    var(--bg) 52%
+  );
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.screen {
+  min-height: 100vh;
+  padding: 24px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: min(760px, 100%);
+  background: rgba(8, 18, 34, .94);
+  border: 1px solid var(--line);
+  box-shadow: 0 0 35px #087ec51a;
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.eyebrow {
+  color: var(--blue2);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: .72rem;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 8vw, 4rem);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+p {
+  line-height: 1.6;
+  color: #c2d4e6;
+}
+
+.blue {
+  color: var(--blue2);
+  text-shadow: 0 0 14px #27aaff55;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.btn {
+  border: 1px solid #2f9fdf;
+  background: linear-gradient(135deg, #123b61, #0878b6);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+.btn.secondary {
+  background: #0a1627;
+  border-color: #284663;
+  color: #cdeaff;
+}
+
+.btn.danger {
+  background: #321522;
+  border-color: #743043;
+}
+
+.btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.full-btn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  background: #050c17;
+  border: 1px solid #284663;
+  border-radius: 9px;
+  color: white;
+  margin: 8px 0 14px;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 2px #37b8ff22;
+}
+
+.intro {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.intro:before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 34px,
+    #37b8ff08 35px 36px
+  );
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+.intro > * {
+  position: relative;
+}
+
+.rune {
+  font-size: 3.5rem;
+  color: var(--blue);
+  text-shadow: 0 0 24px #1eabff;
+  animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+  50% {
+    text-shadow: 0 0 42px #1eabff;
+    opacity: .72;
+  }
+}
+
+.status-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.badge {
+  border: 1px solid #27618a;
+  color: var(--blue2);
+  border-radius: 99px;
+  padding: 6px 11px;
+  font-size: .78rem;
+  letter-spacing: 1px;
+}
+
+.progress {
+  height: 9px;
+  background: #142338;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #1689df, #9cecff);
+  box-shadow: 0 0 14px #37b8ff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.stat,
+.quest,
+.item,
+.storybox {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 1.45rem;
+  color: var(--blue2);
+  margin-top: 7px;
+}
+
+.stat small,
+.quest small {
+  color: var(--muted);
+}
+
+.section {
+  margin-top: 18px;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+  overflow: auto;
+  padding: 3px 0 12px;
+  margin: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.nav button {
+  white-space: nowrap;
+}
+
+.nav button.active {
+  background: #0b6ba4;
+  border-color: #7ad5ff;
+}
+
+.quest {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.quest.done {
+  border-color: #256b59;
+  background: #071c1a;
+}
+
+.quest.done .quest-title {
+  color: var(--green);
+}
+
+.quest p {
+  margin: 5px 0;
+  font-size: .92rem;
+}
+
+.storybox {
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+.notice {
+  padding: 13px;
+  border-left: 3px solid var(--blue);
+  background: #0b2036;
+  color: #cceeff;
+  border-radius: 6px;
+  margin: 14px 0;
+}
+
+.systemline {
+  font-family: monospace;
+  color: var(--blue2);
+  letter-spacing: .4px;
+}
+
+.footer {
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 12px;
+}
+
+.empty {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background: #102b45;
+  border: 1px solid var(--blue);
+  padding: 13px 18px;
+  border-radius: 10px;
+  box-shadow: 0 0 25px #1689df44;
+  z-index: 50;
+  width: max-content;
+  max-width: 90vw;
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 18px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .quest {
+    align-items: flex-start;
+  }
+
+  .quest .btn {
+    padding: 10px;
+    font-size: .8rem;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING SCREEN -->
+
+<section id="introScreen" class="screen">
+  <div class="card intro">
+
+    <div class="eyebrow">A new journey begins</div>
+
+    <div class="rune">◇</div>
+
+    <h1>
+      SHADOW <span class="blue">ACADEMY</span>
+    </h1>
+
+    <p class="systemline">
+      [ THE AWAKENING PROTOCOL IS STANDBY ]
+    </p>
+
+    <p>
+      You were never the strongest hunter. Not yet.<br>
+      Every level must be earned.
+      Every ability must be unlocked.
+    </p>
+
+    <button
+      class="btn full-btn"
+      onclick="showRegistration()">
+      BEGIN AWAKENING
+    </button>
+
+    <p class="muted" style="margin-top:16px">
+      A Solo Leveling-inspired fan project.
+      Not affiliated with the original series.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- PLAYER REGISTRATION -->
+
+<section id="registrationScreen" class="screen hidden">
+
+  <div class="card">
+
+    <div class="eyebrow">Player registration</div>
+
+    <h2>Identify yourself, hunter.</h2>
+
+    <p>
+      The System requires a name before it can
+      initialize your status.
+    </p>
+
+    <label for="playerName">PLAYER NAME</label>
+
+    <input
+      id="playerName"
+      maxlength="24"
+      placeholder="Enter your name"
+      autocomplete="nickname">
+
+    <button
+      class="btn full-btn"
+      onclick="awaken()">
+      CONFIRM IDENTITY
+    </button>
+
+    <button
+      class="btn secondary full-btn"
+      onclick="backToIntro()">
+      RETURN
+    </button>
+
+  </div>
+</section>
+
+
+<!-- AWAKENING SEQUENCE -->
+
+<section id="awakeningScreen" class="screen hidden">
+
+  <div class="card intro">
+
+    <div class="rune">⌁</div>
+
+    <div class="eyebrow">System initialization</div>
+
+    <h1 class="blue">AWAKENING</h1>
+
+    <p id="awakeningText" class="systemline">
+      [ SCANNING PLAYER... ]
+    </p>
+
+    <div class="progress">
+      <span id="awakeningBar"></span>
+    </div>
+
+    <button
+      id="enterSystemBtn"
+      class="btn full-btn hidden"
+      onclick="enterSystem()">
+      ACCEPT THE SYSTEM
+    </button>
+
+  </div>
+</section>
+
+
+<!-- MAIN SYSTEM -->
+
+<section
+  id="appScreen"
+  class="screen hidden"
+  style="align-items:flex-start">
+
+  <main class="card">
+
+    <div class="status-top">
+
+      <div>
+        <div class="eyebrow">Hunter interface</div>
+
+        <h2 style="margin:8px 0 3px">
+          <span id="greetingName">Hunter</span>
+        </h2>
+
+        <div class="muted">
+          The System is watching your progress.
+        </div>
+      </div>
+
+      <div id="rankBadge" class="badge">
+        E-RANK HUNTER
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="status-top">
+
+        <span id="levelLabel" class="systemline">
+          LEVEL 1
+        </span>
+
+        <span id="xpLabel" class="muted">
+          0 / 100 XP
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <span id="xpBar"></span>
+      </div>
+
+    </div>
+
+    <!-- NAVIGATION -->
+
+    <div class="nav">
+
+      <button
+        class="btn active"
+        data-tab="status"
+        onclick="openTab('status',this)">
+        Status
+      </button>
+
+      <button
+        class="btn secondary"
+        data-tab="quests"
+        onclick="openTab('quests',this)">
+        Quests
+      </button>
+
+      <button
+        class="btn secondary"
+        data-tab="journey"
+        onclick="openTab('journey',this)">
+        Journey
+      </button>
+
+      <button
+        class="btn secondary"
+        data-tab="inventory"
+        onclick="openTab('inventory',this)">
+        Inventory
+      </button>
+
+      <button
+        class="btn secondary"
+        data-tab="skills"
+        onclick="openTab('skills',this)">
+        Skills
+      </button>
+
+    </div>
+
+
+    <!-- STATUS TAB -->
+
+    <div id="tab-status" class="tab">
+
+      <div class="notice systemline">
+        [ SYSTEM MESSAGE ] Your current body and mind
+        are the foundation of your growth. Complete
+        real-life quests safely. Progress is saved
+        on this device.
+      </div>
+
+      <div class="grid">
+
+        <div class="stat">
+          Strength
+          <strong id="statStrength">10</strong>
+          <small>Physical power</small>
+        </div>
+
+        <div class="stat">
+          Agility
+          <strong id="statAgility">10</strong>
+          <small>Coordination & movement</small>
+        </div>
+
+        <div class="stat">
+          Vitality
+          <strong id="statVitality">10</strong>
+          <small>Recovery & consistency</small>
+        </div>
+
+        <div class="stat">
+          Intelligence
+          <strong id="statIntelligence">10</strong>
+          <small>Learning & problem solving</small>
+        </div>
+
+        <div class="stat">
+          Perception
+          <strong id="statPerception">10</strong>
+          <small>Awareness & reflection</small>
+        </div>
+
+        <div class="stat">
+          Total XP
+          <strong id="totalXP">0</strong>
+          <small>Lifetime experience</small>
+        </div>
+
+      </div>
+
+      <div class="section two-col">
+
+        <div class="storybox">
+          <strong class="blue">Current Objective</strong>
+          <br>
+          Build your foundation. Do not rush power
+          that you have not earned.
+        </div>
+
+        <div class="storybox">
+          <strong class="blue">Hunter Record</strong>
+          <br>
+          <span id="completedCount">0</span>
+          quests completed
+          <br>
+          <span id="streakCount">0</span>
+          day streak
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- QUESTS TAB -->
+
+    <div id="tab-quests" class="tab hidden">
+
+      <div class="eyebrow">Daily quest protocol</div>
+
+      <h2>Today's Training</h2>
+
+      <p>
+        Choose safe, realistic activities. You can
+        skip or adjust a task if you are ill, injured,
+        or need rest.
+      </p>
+
+      <div id="questList"></div>
+
+      <button
+        class="btn secondary full-btn"
+        onclick="resetDailyQuests()">
+        RESET DAILY QUESTS
+      </button>
+
+      <p class="muted">
+        Daily quests reset by date. XP already earned
+        is never removed.
+      </p>
+
+    </div>
+
+
+    <!-- JOURNEY TAB -->
+
+    <div id="tab-journey" class="tab hidden">
+
+      <div class="eyebrow">Story progression</div>
+
+      <h2 id="chapterTitle">
+        Chapter 1: The Double Gate
+      </h2>
+
+      <div id="chapterStory" class="storybox"></div>
+
+      <div
+        id="chapterReward"
+        class="notice hidden">
+      </div>
+
+      <button
+        id="chapterBtn"
+        class="btn full-btn"
+        onclick="completeChapter()">
+        COMPLETE CHAPTER
+      </button>
+
+      <p class="muted">
+        An original fan-inspired story, not a
+        reproduction of the series.
+      </p>
+
+    </div>
+
+
+    <!-- INVENTORY TAB -->
+
+    <div id="tab-inventory" class="tab hidden">
+
+      <div class="eyebrow">Hunter inventory</div>
+
+      <h2>Items & Relics</h2>
+
+      <div id="inventoryList"></div>
+
+    </div>
+
+
+    <!-- SKILLS TAB -->
+
+    <div id="tab-skills" class="tab hidden">
+
+      <div class="eyebrow">Ability archive</div>
+
+      <h2>Skills</h2>
+
+      <div id="skillsList"></div>
+
+      <div class="notice">
+        New skills unlock through story milestones
+        and steady progress—not by skipping the journey.
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+      <span class="muted">
+        SHADOW ACADEMY • v1.0
+      </span>
+
+      <button
+        class="btn secondary"
+        onclick="exportSave()">
+        EXPORT SAVE
+      </button>
+
+      <button
+        class="btn danger"
+        onclick="confirmReset()">
+        RESET GAME
+      </button>
+
+    </div>
+
+    <p class="muted" style="margin-top:12px">
+      Save data stays in this browser on this device.
+      Export a backup before clearing browser data.
+    </p>
+
+  </main>
+</section>
+
+
+<!-- SYSTEM NOTIFICATION -->
+
+<div id="toast" class="toast hidden"></div>
+
+<input
+  type="file"
+  id="importFile"
+  accept="application/json"
+  class="hidden">
+
+
+<script>
+
+// ==========================================
+// SHADOW ACADEMY — SYSTEM INITIALIZATION
+// ==========================================
+
+const SAVE_KEY = "shadowAcademySave_v1";
+
+const today = () =>
+  new Date().toLocaleDateString("en-CA");
+
+
+const defaultState = () => ({
+
+  playerName: "",
+  awakened: false,
+
+  level: 1,
+  xp: 0,
+  totalXP: 0,
+
+  stats: {
+    strength: 10,
+    agility: 10,
+    vitality: 10,
+    intelligence: 10,
+    perception: 10
+  },
+
+  rank: "E",
+
+  completedQuests: 0,
+  streak: 0,
+  lastQuestDate: "",
+
+  dailyDate: today(),
+  dailyDone: [],
+
+  chapter: 0,
+
+  inventory: [],
+
+  skills: ["Hunter's Instinct"],
+
+  doubleGateComplete: false
+
+});
+
+
+let state = loadState();
+
+
+// ==========================================
+// DAILY QUEST DATA
+// ==========================================
+
+const dailyQuests = [
+
+  {
+    id: "move",
+    title: "Movement Training",
+    detail:
+      "Do a safe, comfortable movement session or take a brisk walk.",
+    xp: 20,
+    stat: "agility"
+  },
+
+  {
+    id: "study",
+    title: "Knowledge Quest",
+    detail:
+      "Study or practise a useful skill for 20 focused minutes.",
+    xp: 20,
+    stat: "intelligence"
+  },
+
+  {
+    id: "reflect",
+    title: "Awareness Training",
+    detail:
+      "Spend 5 minutes planning, journaling, or reflecting quietly.",
+    xp: 10,
+    stat: "perception"
+  },
+
+  {
+    id: "care",
+    title: "Recovery Protocol",
+    detail:
+      "Drink water, eat normally, and take care of your body. Rest counts.",
+    xp: 10,
+    stat: "vitality"
+  }
+
+];
+
+
+// ==========================================
+// SAVE SYSTEM
+// ==========================================
+
+function loadState() {
+
+  try {
+
+    const saved = JSON.parse(
+      localStorage.getItem(SAVE_KEY)
+    );
+
+    if (!saved) {
+      return defaultState();
+    }
+
+    const base = defaultState();
+
+    return {
+      ...base,
+      ...saved,
+
+      stats: {
+        ...base.stats,
+        ...(saved.stats || {})
+      },
+
+      dailyDone:
+        Array.isArray(saved.dailyDone)
+          ? saved.dailyDone
+          : [],
+
+      inventory:
+        Array.isArray(saved.inventory)
+          ? saved.inventory
+          : [],
+
+      skills:
+        Array.isArray(saved.skills)
+          ? saved.skills
+          : base.skills
+    };
+
+  } catch (error) {
+
+    return defaultState();
+
+  }
+
+}
+
+
+function saveState() {
+
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(state)
+  );
+
+}
+
+
+// ==========================================
+// SCREEN CONTROL
+// ==========================================
+
+function show(id) {
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(screen => {
+      screen.classList.add("hidden");
+    });
+
+  document
+    .getElementById(id)
+    .classList.remove("hidden");
+
+}
+
+
+function showRegistration() {
+
+  show("registrationScreen");
+
+  document
+    .getElementById("playerName")
+    .focus();
+
+}
+
+
+function backToIntro() {
+
+  show("introScreen");
+
+}
+
+
+// ==========================================
+// AWAKENING
+// ==========================================
+
+function awaken() {
+
+  const name = document
+    .getElementById("playerName")
+    .value
+    .trim();
+
+  if (!name) {
+
+    toast("Enter a player name first.");
+
+    return;
+
+  }
+
+  state.playerName = name;
+  state.awakened = true;
+
+  saveState();
+
+  show("awakeningScreen");
+
+  const lines = [
+
+    "[ SCANNING PLAYER... ]",
+
+    "[ INITIALIZING STATUS WINDOW... ]",
+
+    "[ AWAKENING COMPLETE ]",
+
+    "[ PLAYER REGISTRATION ACCEPTED ]"
+
+  ];
+
+  let i = 0;
+
+  const text =
+    document.getElementById("awakeningText");
+
+  const bar =
+    document.getElementById("awakeningBar");
+
+  const btn =
+    document.getElementById("enterSystemBtn");
+
+  btn.classList.add("hidden");
+
+  bar.style.width = "0%";
+
+  text.textContent = lines[0];
+
+  const timer = setInterval(() => {
+
+    i++;
+
+    if (i < lines.length) {
+
+      text.textContent = lines[i];
+
+      bar.style.width =
+        (i / (lines.length - 1) * 100) + "%";
+
+    } else {
+
+      clearInterval(timer);
+
+      text.textContent = "[ SYSTEM ONLINE ]";
+
+      bar.style.width = "100%";
+
+      btn.classList.remove("hidden");
+
+    }
+
+  }, 750);
+
+}
+
+
+function enterSystem() {
+
+  show("appScreen");
+
+  renderAll();
+
+  openTab(
+    "status",
+    document.querySelector('[data-tab="status"]')
+  );
+
+  toast(
+    "System initialized. Welcome, " +
+    state.playerName + "."
+  );
+
+}
+
+
+// ==========================================
+// TAB NAVIGATION
+// ==========================================
+
+function openTab(name, button) {
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(tab => {
+      tab.classList.add("hidden");
+    });
+
+  document
+    .getElementById("tab-" + name)
+    .classList.remove("hidden");
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(btn => {
+
+      btn.classList.remove("active");
+
+      btn.classList.add("secondary");
+
+    });
+
+  if (button) {
+
+    button.classList.add("active");
+
+    button.classList.remove("secondary");
+
+  }
+
+  if (name === "quests") renderQuests();
+
+  if (name === "journey") renderJourney();
+
+  if (name === "inventory") renderInventory();
+
+  if (name === "skills") renderSkills();
+
+}
+
+
+// ==========================================
+// EXPERIENCE AND LEVELING
+// ==========================================
+
+function xpNeeded() {
+
+  return 100 + (state.level - 1) * 50;
+
+}
+
+
+function addXP(amount, stat) {
+
+  state.xp += amount;
+
+  state.totalXP += amount;
+
+  if (
+    stat &&
+    state.stats[stat] !== undefined
+  ) {
+
+    state.stats[stat] += 1;
+
+  }
+
+  while (
+    state.xp >= xpNeeded() &&
+    state.level < 100
+  ) {
+
+    state.xp -= xpNeeded();
+
+    state.level++;
+
+    toast(
+      "LEVEL UP! You reached Level " +
+      state.level + "."
+    );
+
+    if (
+      state.level >= 5 &&
+      !state.skills.includes("Mana Awareness")
+    ) {
+
+      state.skills.push("Mana Awareness");
+
+    }
+
+    if (
+      state.level >= 10 &&
+      !state.skills.includes("Shadow Resonance")
+    ) {
+
+      state.skills.push("Shadow Resonance");
+
+    }
+
+  }
+
+  updateRank();
+
+  saveState();
+
+  renderAll();
+
+}
+
+
+// ==========================================
+// RANK PROGRESSION
+// ==========================================
+
+function updateRank() {
+
+  if (state.level >= 50) {
+
+    state.rank = "S";
+
+  } else if (state.level >= 30) {
+
+    state.rank = "A";
+
+  } else if (state.level >= 20) {
+
+    state.rank = "B";
+
+  } else if (state.level >= 12) {
+
+    state.rank = "C";
+
+  } else if (state.level >= 6) {
+
+    state.rank = "D";
+
+  } else {
+
+    state.rank = "E";
+
+  }
+
+}
+
+
+// ==========================================
+// STATUS DISPLAY
+// ==========================================
+
+function renderAll() {
+
+  document.getElementById(
+    "greetingName"
+  ).textContent =
+    state.playerName || "Hunter";
+
+  document.getElementById(
+    "rankBadge"
+  ).textContent =
+    state.rank + "-RANK HUNTER";
+
+  document.getElementById(
+    "levelLabel"
+  ).textContent =
+    "LEVEL " + state.level;
+
+  document.getElementById(
+    "xpLabel"
+  ).textContent =
+    state.xp + " / " + xpNeeded() + " XP";
+
+  document.getElementById(
+    "xpBar"
+  ).style.width =
+    Math.min(
+      100,
+      state.xp / xpNeeded() * 100
+    ) + "%";
+
+  document.getElementById(
+    "statStrength"
+  ).textContent = state.stats.strength;
+
+  document.getElementById(
+    "statAgility"
+  ).textContent = state.stats.agility;
+
+  document.getElementById(
+    "statVitality"
+  ).textContent = state.stats.vitality;
+
+  document.getElementById(
+    "statIntelligence"
+  ).textContent = state.stats.intelligence;
+
+  document.getElementById(
+    "statPerception"
+  ).textContent = state.stats.perception;
+
+  document.getElementById(
+    "totalXP"
+  ).textContent = state.totalXP;
+
+  document.getElementById(
+    "completedCount"
+  ).textContent = state.completedQuests;
+
+  document.getElementById(
+    "streakCount"
+  ).textContent = state.streak;
+
+  renderQuests();
+
+  renderJourney();
+
+  renderInventory();
+
+  renderSkills();
+
+}
+
+
+// ==========================================
+// DAILY QUEST DATE CHECK
+// ==========================================
+
+function checkDate() {
+
+  const now = today();
+
+  if (state.dailyDate !== now) {
+
+    state.dailyDate = now;
+
+    state.dailyDone = [];
+
+    saveState();
+
+  }
+
+}
+
+
+// ==========================================
+// DAILY QUEST DISPLAY
+// ==========================================
+
+function renderQuests() {
+
+  checkDate();
+
+  const list =
+    document.getElementById("questList");
+
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  dailyQuests.forEach(q => {
+
+    const done =
+      state.dailyDone.includes(q.id);
+
+    const el =
+      document.createElement("div");
+
+    el.className =
+      "quest" + (done ? " done" : "");
+
+    el.innerHTML = `
+      <div>
+        <strong class="quest-title">
+          ${done ? "✓ " : ""}${q.title}
+        </strong>
+
+        <p>${q.detail}</p>
+
+        <small>
+          Reward: +${q.xp} XP • +1 ${q.stat}
+        </small>
+      </div>
+
+      <button
+        class="btn ${done ? "secondary" : ""}"
+        ${done ? "disabled" : ""}
+        onclick="claimQuest('${q.id}')">
+
+        ${done ? "COMPLETE" : "CLAIM"}
+
+      </button>
+    `;
+
+    list.appendChild(el);
+
+  });
+
+}
+
+
+// ==========================================
+// QUEST REWARDS
+// ==========================================
+
+function claimQuest(id) {
+
+  checkDate();
+
+  const q = dailyQuests.find(
+    quest => quest.id === id
+  );
+
+  if (!q || state.dailyDone.includes(id)) {
+    return;
+  }
+
+  state.dailyDone.push(id);
+
+  state.completedQuests++;
+
+  if (
+    state.dailyDone.length === 1 &&
+    state.lastQuestDate !== today()
+  ) {
+
+    state.streak =
+      state.lastQuestDate
+        ? state.streak + 1
+        : 1;
+
+    state.lastQuestDate = today();
+
+  }
+
+  addXP(q.xp, q.stat);
+
+  toast(
+    "Quest complete: +" + q.xp + " XP"
+  );
+
+  renderQuests();
+
+}
+
+
+// ==========================================
+// RESET DAILY CHECKLIST
+// ==========================================
+
+function resetDailyQuests() {
+
+  if (
+    !confirm(
+      "Reset today's quest checklist? " +
+      "This will not remove earned XP."
+    )
+  ) {
+
+    return;
+
+  }
+
+  state.dailyDone = [];
+
+  state.dailyDate = today();
+
+  saveState();
+
+  renderQuests();
+
+  toast("Daily checklist reset.");
+
+}
+
+
+// ==========================================
+// STORY CHAPTERS
+// ==========================================
+
+const chapters = [
+
+  {
+    title: "Chapter 1: The Double Gate",
+
+    story:
+`The raid was meant to be routine. Your party enters a low-rank dungeon, but a second stone doorway appears beyond the first chamber. The air turns cold. Blue symbols crawl across the walls.
+
+A strange message appears before you:
+
+[ HIDDEN INSTANCE DETECTED ]
+[ SURVIVAL CONDITIONS UNKNOWN ]
+
+You are weak, untested, and far from ready. The first trial is not about defeating everything. It is about observing, making careful choices, and surviving the encounter.`,
+
+    reward: "Mysterious Stone"
+
+  },
+
+  {
+    title: "Chapter 2: The Silent Contract",
+
+    story:
+`After the incident, a blue window appears only for you. It records your progress and offers a path no ordinary hunter can see.
+
+The System does not promise easy victories. It gives you tasks, measures your choices, and waits for proof that you can be consistent.
+
+[ DAILY QUESTS UNLOCKED ]
+[ STATUS WINDOW AVAILABLE ]
+
+Build your foundation before seeking dangerous power.`,
+
+    reward: "System Contract"
+
+  },
+
+  {
+    title: "Chapter 3: The First Threshold",
+
+    story:
+`Your status has begun to change. Small improvements have accumulated into real progress. A sealed mark appears in the corner of the interface.
+
+It reacts to steady effort, learning, and completing story milestones.
+
+[ HIDDEN CONDITION: CONSISTENCY ]
+
+The next gate remains sealed until you reach Level 5. Keep training safely and return when the System recognizes your progress.`,
+
+    reward: "Sealed Emblem"
+
+  },
+
+  {
+    title: "Chapter 4: The Job-Change Signal",
+
+    story:
+`A new signal pulses from beyond the known dungeon routes.
+
+It is not an invitation to rush blindly into danger. The System warns that a major trial requires preparation, patience, and a stronger foundation.
+
+Reach Level 10 to unlock the next story chapter. New abilities will be earned through milestones.`,
+
+    reward: "Job-Change Token"
+
+  }
+
+];
+
+
+// ==========================================
+// JOURNEY DISPLAY
+// ==========================================
+
+function renderJourney() {
+
+  const c =
+    chapters[
+      Math.min(
+        state.chapter,
+        chapters.length - 1
+      )
+    ];
+
+  document.getElementById(
+    "chapterTitle"
+  ).textContent =
+    state.chapter >= chapters.length
+      ? "Main story checkpoint reached"
+      : c.title;
+
+  document.getElementById(
+    "chapterStory"
+  ).textContent =
+    state.chapter >= chapters.length
+      ? "You have reached the end of this prototype's opening arc. Your save is intact. Future chapters can expand this journey with dungeons, bosses, and shadow abilities."
+      : "[ SYSTEM ARCHIVE ]\n\n" + c.story;
+
+  const reward =
+    document.getElementById("chapterReward");
+
+  const btn =
+    document.getElementById("chapterBtn");
+
+  if (
+    state.chapter === 0 &&
+    state.doubleGateComplete
+  ) {
+
+    reward.classList.remove("hidden");
+
+    reward.textContent =
+      "Reward obtained: Mysterious Stone";
+
+    btn.textContent = "CHAPTER COMPLETED";
+
+    btn.disabled = true;
+
+  } else if (
+    state.chapter >= chapters.length
+  ) {
+
+    reward.classList.add("hidden");
+
+    btn.classList.add("hidden");
+
+  } else if (
+    state.chapter === 2 &&
+    state.level < 5
+  ) {
+
+    reward.classList.remove("hidden");
+
+    reward.textContent =
+      "Requirement: Reach Level 5 to continue.";
+
+    btn.textContent = "REQUIREMENT NOT MET";
+
+    btn.disabled = true;
+
+  } else if (
+    state.chapter === 3 &&
+    state.level < 10
+  ) {
+
+    reward.classList.remove("hidden");
+
+    reward.textContent =
+      "Requirement: Reach Level 10 to continue.";
+
+    btn.textContent = "REQUIREMENT NOT MET";
+
+    btn.disabled = true;
+
+  } else {
+
+    reward.classList.add("hidden");
+
+    btn.classList.remove("hidden");
+
+    btn.disabled = false;
+
+    btn.textContent =
+      state.chapter === 0
+        ? "SURVIVE THE ENCOUNTER"
+        : state.chapter === 1
+          ? "ACCEPT THE CONTRACT"
+          : "UNLOCK CHAPTER";
+
+  }
+
+}
+
+
+// ==========================================
+// COMPLETE STORY CHAPTER
+// ==========================================
+
+function completeChapter() {
+
+  if (state.chapter === 0) {
+
+    state.doubleGateComplete = true;
+
+    state.inventory.push({
+
+      name: "Mysterious Stone",
+
+      description:
+        "A cold stone carrying a faint blue glow. Its purpose is unknown."
+
+    });
+
+    state.chapter = 1;
+
+    addXP(30, "perception");
+
+    toast(
+      "Hidden story milestone cleared. +30 XP"
+    );
+
+  } else if (state.chapter === 1) {
+
+    state.inventory.push({
+
+      name: "System Contract",
+
+      description:
+        "A record of your awakening and the rules of your new journey."
+
+    });
+
+    state.chapter = 2;
+
+    addXP(20, "intelligence");
+
+    toast("Daily quest protocol unlocked.");
+
+  } else if (state.chapter === 2) {
+
+    if (state.level < 5) {
+
+      toast("Reach Level 5 first.");
+
+      return;
+
+    }
+
+    state.inventory.push({
+
+      name: "Sealed Emblem",
+
+      description:
+        "An emblem that responds to continued progress."
+
+    });
+
+    state.chapter = 3;
+
+    addXP(40, "vitality");
+
+  } else if (state.chapter === 3) {
+
+    if (state.level < 10) {
+
+      toast("Reach Level 10 first.");
+
+      return;
+
+    }
+
+    state.inventory.push({
+
+      name: "Job-Change Token",
+
+      description:
+        "A token marking the beginning of a larger trial."
+
+    });
+
+    state.chapter = 4;
+
+    addXP(50, "strength");
+
+  }
+
+  saveState();
+
+  renderAll();
+
+  renderJourney();
+
+}
+
+
+// ==========================================
+// INVENTORY DISPLAY
+// ==========================================
+
+function renderInventory() {
+
+  const box =
+    document.getElementById("inventoryList");
+
+  if (!box) return;
+
+  box.innerHTML = "";
+
+  if (!state.inventory.length) {
+
+    box.innerHTML = `
+      <div class="empty">
+        Inventory empty.<br>
+        Complete story milestones to discover items.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  state.inventory.forEach(item => {
+
+    const el =
+      document.createElement("div");
+
+    el.className = "item";
+
+    el.style.marginBottom = "10px";
+
+    el.innerHTML = `
+      <strong class="blue"></strong>
+      <p style="margin:7px 0 0"></p>
+    `;
+
+    el.querySelector("strong").textContent =
+      item.name;
+
+    el.querySelector("p").textContent =
+      item.description;
+
+    box.appendChild(el);
+
+  });
+
+}
+
+
+// ==========================================
+// SKILL DISPLAY
+// ==========================================
+
+function renderSkills() {
+
+  const box =
+    document.getElementById("skillsList");
+
+  if (!box) return;
+
+  box.innerHTML = "";
+
+  state.skills.forEach(skill => {
+
+    const el =
+      document.createElement("div");
+
+    el.className = "item";
+
+    el.style.marginBottom = "10px";
+
+    el.innerHTML = `
+      <strong class="blue"></strong>
+      <p style="margin:7px 0 0">
+        Status: unlocked
+      </p>
+    `;
+
+    el.querySelector("strong").textContent =
+      skill;
+
+    box.appendChild(el);
+
+  });
+
+  const locked = [
+
+    ["Mana Awareness", "Unlocks at Level 5"],
+
+    ["Shadow Resonance", "Unlocks at Level 10"],
+
+    ["Shadow Extraction", "Future story milestone"]
+
+  ];
+
+  locked
+    .filter(([name]) =>
+      !state.skills.includes(name)
+    )
+    .forEach(([name, description]) => {
+
+      const el =
+        document.createElement("div");
+
+      el.className = "item";
+
+      el.style.marginBottom = "10px";
+
+      el.style.opacity = ".65";
+
+      el.innerHTML = `
+        <strong></strong>
+        <p style="margin:7px 0 0"></p>
+      `;
+
+      el.querySelector("strong").textContent =
+        "🔒 " + name;
+
+      el.querySelector("p").textContent =
+        description;
+
+      box.appendChild(el);
+
+    });
+
+}
+
+
+// ==========================================
+// SYSTEM NOTIFICATIONS
+// ==========================================
+
+function toast(message) {
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent = message;
+
+  el.classList.remove("hidden");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+
+    el.classList.add("hidden");
+
+  }, 2800);
+
+}
+
+
+// ==========================================
+// EXPORT SAVE BACKUP
+// ==========================================
+
+function exportSave() {
+
+  const blob = new Blob(
+    [JSON.stringify(state, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+
+  a.download = "shadow-academy-save.json";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+  toast("Save backup exported.");
+
+}
+
+
+// ==========================================
+// IMPORT SAVE BACKUP
+// ==========================================
+
+document
+  .getElementById("importFile")
+  .addEventListener("change", async event => {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    try {
+
+      const imported =
+        JSON.parse(await file.text());
+
+      if (
+        !imported ||
+        typeof imported !== "object" ||
+        !imported.stats
+      ) {
+
+        throw new Error("Invalid save");
+
+      }
+
+      state = {
+
+        ...defaultState(),
+
+        ...imported,
+
+        stats: {
+          ...defaultState().stats,
+          ...imported.stats
+        }
+
+      };
+
+      saveState();
+
+      show("appScreen");
+
+      renderAll();
+
+      toast("Save imported.");
+
+    } catch (error) {
+
+      toast("Could not import that save file.");
+
+    }
+
+    event.target.value = "";
+
+  });
+
+
+// ==========================================
+// RESET GAME
+// ==========================================
+
+function confirmReset() {
+
+  if (
+    !confirm(
+      "Reset all Shadow Academy progress on this device? " +
+      "Export your save first if you want a backup."
+    )
+  ) {
+
+    return;
+
+  }
+
+  localStorage.removeItem(SAVE_KEY);
+
+  state = defaultState();
+
+  show("introScreen");
+
+  toast("System data reset.");
+
+}
+
+
+// ==========================================
+// STARTUP
+// ==========================================
+
+function startApp() {
+
+  if (
+    state.awakened &&
+    state.playerName
+  ) {
+
+    show("appScreen");
+
+    renderAll();
+
+  } else {
+
+    show("introScreen");
+
+  }
+
+}
+
+startApp();
+
+</script>
+
+</body>
+  </html>
