@@ -779,19 +779,140 @@ input:focus {
   </main>
 </section>
 
+// ==========================================
+// SHADOW ACADEMY AUDIO ENGINE
+// ==========================================
 
-<!-- SYSTEM NOTIFICATION -->
+let audioContext = null;
+let soundEnabled = true;
 
-<div id="toast" class="toast hidden"></div>
+function initAudio() {
+  if (!audioContext) {
+    audioContext = new (
+      window.AudioContext ||
+      window.webkitAudioContext
+    )();
+  }
 
-<input
-  type="file"
-  id="importFile"
-  accept="application/json"
-  class="hidden">
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+}
+
+function playGlitch(type = "notification") {
+
+  if (!soundEnabled) return;
+
+  initAudio();
+
+  const ctx = audioContext;
+  const now = ctx.currentTime;
+
+  const settings = {
+    notification: [180, 520],
+    dungeon: [65, 180],
+    levelup: [300, 1000],
+    boss: [45, 110],
+    quest: [400, 750]
+  };
+
+  const frequencies =
+    settings[type] || settings.notification;
+
+  const oscillator = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+
+  oscillator.type = "sawtooth";
+
+  oscillator.frequency.setValueAtTime(
+    frequencies[0],
+    now
+  );
+
+  oscillator.frequency.exponentialRampToValueAtTime(
+    frequencies[1],
+    now + 0.25
+  );
+
+  filter.type = "lowpass";
+  filter.frequency.value = 1800;
+
+  gain.gain.setValueAtTime(0.0001, now);
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.16,
+    now + 0.025
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    now + 0.4
+  );
+
+  oscillator.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  oscillator.start(now);
+  oscillator.stop(now + 0.42);
+
+  // Digital interference clicks
+
+  for (let i = 0; i < 3; i++) {
+
+    const click = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+
+    click.type = "square";
+
+    click.frequency.value =
+      800 + Math.random() * 1800;
+
+    clickGain.gain.setValueAtTime(
+      0.045,
+      now + i * 0.045
+    );
+
+    clickGain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      now + i * 0.045 + 0.035
+    );
+
+    click.connect(clickGain);
+    clickGain.connect(ctx.destination);
+
+    click.start(now + i * 0.045);
+    click.stop(now + i * 0.045 + 0.04);
+
+  }
+
+}
 
 
-<script>
+// ==========================================
+// SYSTEM NOTIFICATIONS
+// ==========================================
+
+function toast(message, sound = "notification") {
+
+  const el = document.getElementById("toast");
+
+  el.textContent = message;
+
+  el.classList.remove("hidden");
+
+  playGlitch(sound);
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer = setTimeout(() => {
+
+    el.classList.add("hidden");
+
+  }, 2800);
+
+}
 
 // ==========================================
 // SHADOW ACADEMY — SYSTEM INITIALIZATION
